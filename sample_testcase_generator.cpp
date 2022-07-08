@@ -6,21 +6,16 @@ using namespace std;
 const int mxN=5; // number of test casese
 const int mxT=1e6, mxL=1e6; // our constraints
 
-mt19937 mt_rng(chrono::steady_clock::now().time_since_epoch().count());
+// swap for mt19937 mt_rng(chrono::steady_clock::now().time_since_epoch().count()) if you want a faster but less random rng
+random_device rng;
 inline ll randint(ll a, ll b) {
-	return uniform_int_distribution<ll>(a, b)(mt_rng);
+	return uniform_int_distribution<ll>(a, b)(rng);
 }
 
-void create(string n){
+string in="input/input00.txt", out="output/output00.txt";
+
+void create(){
 	// Creating files
-	string in="input/input";
-	in+=n;
-	in+=".txt";
-
-	string out="output/output";
-	out+=n;
-	out+=".txt";
-
 	ofstream input(in);
 	ofstream output(out);
 	
@@ -35,9 +30,13 @@ void create(string n){
 }
 
 int main(){
+	if(mxN>=100){
+		printf("Number of test cases must not be over 99!\nNo changes made to files.\n");
+		return 0;
+	}
 	// Sample test case
-	ofstream input("input/input00.txt");
-	ofstream output("output/output00.txt");
+	ofstream input(in);
+	ofstream output(out);
 
 	input << "input";
 	output << "output";
@@ -46,12 +45,18 @@ int main(){
 	output.close();
 
 	for(int i=1; i<=mxN; ++i){  
-		string filename;
+		string n=to_string(i);
 		if(i<10){ // for file formatting
-			filename.push_back('0'); // 01 instead of 1, 06 instead of 6
+			in[12]=n[0];
+			out[14]=n[0];
 		}
-		filename+=to_string(i);
-
-		create(filename);
+		else {
+			in[11]=n[0];
+			in[12]=n[1];
+			out[13]=n[0];
+			out[14]=n[1];
+		}
+		create();
 	}
+	printf("Done!\n");
 }
